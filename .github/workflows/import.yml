@@ -36,6 +36,9 @@ jobs:
           rsync -avcizxL --delete-before \
             --exclude '.git*' \
             --exclude 'README.*' \
+            --exclude '*.tgz' \
+            --exclude 'index.xml' \
+            --exclude 'index.xml~' \
             xml2rfc.tools.ietf.org::xml2rfc.bibxml .
 
       - name: Git diff
