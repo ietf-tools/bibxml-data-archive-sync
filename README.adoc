@@ -19,13 +19,17 @@ The origin of data is:
 
 It provides the following BibXML data repositories:
 
-* `ghostlinkd`
-* `ietfdb`
-* `mailarch`
-* `mailreplay`
-* `postconfirm`
-* `postfind`
-* `xml2rfc`
+* `bibxml-nist-new`
+* `bibxml-nist`
+* `bibxml`
+* `bibxml2`
+* `bibxml3`
+* `bibxml4`
+* `bibxml5`
+* `bibxml6`
+* `bibxml7`
+* `bibxml8`
+* `bibxml9`
 
 == Usage
 
