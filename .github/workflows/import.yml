@@ -36,6 +36,8 @@ jobs:
           rsync -avcizxL --delete-before \
             --exclude '.git*' \
             --exclude 'README.*' \
+            --exclude 'index.rdf' \
+            --exclude 'index.xml' \
             --include={'*.xml','*.rdf'} \
             --exclude={'*.tgz','*.sv','*.cgi','*.old','*.py','*~'} \
             xml2rfc.tools.ietf.org::xml2rfc.bibxml .
