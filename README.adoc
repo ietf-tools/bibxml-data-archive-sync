@@ -1,0 +1,49 @@
+= xml2rfc.tools.ietf.org BibXML data mirror
+
+This work is created under the IETF/Ribose BibXML service SOW.
+
+image:https://github.com/ietf-ribose/bibxml-data-archive-sync/workflows/import/badge.svg["Last import", link="https://github.com/ietf-ribose/bibxml-data-archive-sync/actions?workflow=import"]
+
+== Purpose
+
+This repository acts as a mirror to the live IETF xml2rfc BibXML data.
+
+This data is used for legacy path mapping for the BibXML service
+(https://github.com/ietf-ribose/bibxml-service[bibxml-service]).
+
+The origin of data is:
+
+* `xml2rfc.tools.ietf.org::xml2rfc.bibxml` (publicly accessible)
+
+== Contents
+
+It provides the following BibXML data repositories:
+
+* `ghostlinkd`
+* `ietfdb`
+* `mailarch`
+* `mailreplay`
+* `postconfirm`
+* `postfind`
+* `xml2rfc`
+
+== Usage
+
+The `import` workflow runs daily at 2am UTC, and does the following:
+
+* Checks out the latest data of
+  https://github.com/ietf-ribose/bibxml-data-archive[bibxml-data-archive]
+
+* Runs `rsync` from `xml2rfc.tools.ietf.org` to obtain the latest BibXML data,
+  overriding the data of the Git bibxml-data-archive repository.
+
+** The `README.*` and `.git*` paths are protected from `rsync`, meaning that
+   these files in bibxml-data-archive will not be removed by `rsync` (since the `rsync`
+   source does not have them).
+
+* Compares the changes made and commits them, and pushes any changes
+  back to https://github.com/ietf-ribose/bibxml-data-archive[bibxml-data-archive]
+
+== License
+
+BSD 3-clause license.

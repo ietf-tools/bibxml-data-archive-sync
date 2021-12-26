@@ -1,0 +1,70 @@
+name: import
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 1 * * *'  # every day at 1:00
+
+jobs:
+  import:
+    name: import
+    runs-on: ubuntu-latest
+    # continue-on-error: ${{ matrix.experimental }}
+    steps:
+      - name: Checkout bibxml-data-archive repo
+        uses: actions/checkout@v2
+        with:
+          repository: ietf-ribose/bibxml-data-archive
+          token: ${{ secrets.IETF_RIBOSE_CI_PAT }}
+          path: bibxml-data-archive
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "ietf-ribose-ci"
+          git config --global user.email "ietf-ribose-ci@users.noreply.github.com"
+
+      - name: Add GitHub remote to repo
+        working-directory: bibxml-data-archive
+        run: |
+          git remote set-url origin \
+            https://${{ secrets.IETF_RIBOSE_CI_USERNAME }}:${{ secrets.IETF_RIBOSE_CI_PAT }}@github.com/ietf-ribose/bibxml-data-archive
+
+      - name: Perform rsync from IETF
+        working-directory: bibxml-data-archive
+        run: |
+          rsync -avcizxL --delete-before \
+            --exclude '.git*' \
+            --exclude 'README.*' \
+            xml2rfc.tools.ietf.org::xml2rfc.bibxml .
+
+      - name: Git diff
+        working-directory: bibxml-data-archive
+        run: |
+          git diff
+
+      - name: Skip the rest if no changes
+        id: git_status
+        working-directory: bibxml-data-archive
+        run: |
+          echo ::set-output name=STATUS::$(git status --porcelain | tr -d [:space:])
+
+      - name: Add changes
+        if: steps.git_status.outputs.STATUS != ''
+        working-directory: bibxml-data-archive
+        run: |
+          git add -A
+          git commit -m 'Import latest changes'
+
+      - name: Git log
+        if: steps.git_status.outputs.STATUS != ''
+        working-directory: bibxml-data-archive
+        run: |
+          git log | head -100
+
+      - name: Git push to GitHub bibxml-data-archive
+        if: steps.git_status.outputs.STATUS != ''
+        working-directory: bibxml-data-archive
+        run: |
+          git push --all -f
+          git push --tags -f
