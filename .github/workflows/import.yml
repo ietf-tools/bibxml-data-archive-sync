@@ -15,20 +15,20 @@ jobs:
       - name: Checkout bibxml-data-archive repo
         uses: actions/checkout@v2
         with:
-          repository: ietf-ribose/bibxml-data-archive
-          token: ${{ secrets.IETF_RIBOSE_CI_PAT }}
+          repository: ietf-tools/bibxml-data-archive
+          token: ${{ secrets.IETF_BIB_BOT_PAT_TMP }}
           path: bibxml-data-archive
 
       - name: Setup Git
         run: |
-          git config --global user.name "ietf-ribose-ci"
-          git config --global user.email "ietf-ribose-ci@users.noreply.github.com"
+          git config user.name ietf-bib-bot
+          git config user.email gh-bib-bot@llc.ietf.org
 
       - name: Add GitHub remote to repo
         working-directory: bibxml-data-archive
         run: |
           git remote set-url origin \
-            https://${{ secrets.IETF_RIBOSE_CI_USERNAME }}:${{ secrets.IETF_RIBOSE_CI_PAT }}@github.com/ietf-ribose/bibxml-data-archive
+            https://ietf-bib-bot:${{ secrets.IETF_BIB_BOT_PAT_TMP }}@github.com/ietf-tools/bibxml-data-archive
 
       - name: Perform rsync from IETF
         working-directory: bibxml-data-archive
