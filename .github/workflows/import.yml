@@ -21,8 +21,8 @@ jobs:
 
       - name: Setup Git
         run: |
-          git config user.name ietf-bib-bot
-          git config user.email gh-bib-bot@llc.ietf.org
+          git config --global user.name ietf-bib-bot
+          git config --global user.email gh-bib-bot@llc.ietf.org
 
       - name: Add GitHub remote to repo
         working-directory: bibxml-data-archive
